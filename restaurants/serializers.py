@@ -18,7 +18,7 @@ class ProductsSerializer(serializers.ModelSerializer):
     que permite serializar el modelo 'Product' para
     exponer su información a través del API en formato JSON 
     """
-
+    restaurant = RestaurantSerializer(read_only=True)
     class Meta:
         model = Product
         fields = '__all__'
