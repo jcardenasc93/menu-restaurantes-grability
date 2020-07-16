@@ -43,4 +43,8 @@ class ProductsViews(viewsets.ModelViewSet):
         # Cuando se realiza una petición GET el servidor identifica si el ID capturado en la URL pertenece a un producto
         # de ser asi, el API retorna el detalle del producto
 
-        return Response({'detail': 'GET retrieve request OK'}, status=status.HTTP_200_OK)
+        product = Product.objects.get(id=pk)        
+        product_serializer = ProductsSerializer(product)
+        restaurant_data = product.restaurant.name
+
+        return Response({'restaurant_name': restaurant_data, 'product_detail': product_serializer.data}, status=status.HTTP_200_OK)
