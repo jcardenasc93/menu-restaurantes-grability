@@ -14,29 +14,25 @@ class RestaurantsView(viewsets.ModelViewSet):
     """ Vista basada en clase para manejar las peticiones
     hacia el modelo de Restaurant
     """
+    serializer_class = RestaurantSerializer
 
-    def get_list(self, request):
+    def get_queryset(self):
         # Cuando se realiza una petición GET el API retorna todos los objetos Restaurant existentes
-        restaurants = Restaurant.objects.all()
-        total = restaurants.count()
-        serializer = RestaurantSerializer(restaurants, many=True)
-        return Response({'total': total, 'restaurants': serializer.data}, status=status.HTTP_200_OK)
+        return Restaurant.objects.all()
 
 
 class ProductsViews(viewsets.ModelViewSet):
     """Vista basada en clase para manejar las peticiones
     hacia el modelo Product
     """
+    serializer_class = ProductsSerializer
 
-    def get_list(self, request, pk=None):
-        # Cuando se realiza una petición GET el API retorna los objetos Products relacionados con el
-        # restaurante capturado desde la URL. Si el ID no existe retorna 404
+    def get_queryset(self, *args, **kwargs):
+        # Captura el pk pasado en la URL
+        pk = self.kwargs['pk']
         restaurant = get_object_or_404(Restaurant, id=pk)
-        products = Product.objects.filter(restaurant=restaurant.id)
-        products_serializer = ProductsSerializer(products, many=True)
-        restaurant_data = {'id': restaurant.id, 'name': restaurant.name}
 
-        return Response({'restaurant': restaurant_data, 'total': products.count(), 'products': products_serializer.data}, status=status.HTTP_200_OK)
+        return Product.objects.filter(restaurant=restaurant.id)
 
     def retrieve(self, request, pk=None):
         # Cuando se realiza una petición GET el servidor identifica si el ID capturado en la URL pertenece a un producto
@@ -46,4 +42,4 @@ class ProductsViews(viewsets.ModelViewSet):
         product_serializer = ProductsSerializer(product)
         restaurant_data = product.restaurant.name
 
-        return Response({'restaurant_name': restaurant_data, 'product_detail': product_serializer.data}, status=status.HTTP_200_OK)
+        return Response({'product_detail': product_serializer.data}, status=status.HTTP_200_OK)
