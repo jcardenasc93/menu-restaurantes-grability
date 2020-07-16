@@ -15,5 +15,6 @@ class RestaurantsView(APIView):
     """
     def get(self, request):
         restaurants = Restaurant.objects.all()
+        total = restaurants.count()
         serializer = RestaurantSerializer(restaurants, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'total': total, 'restaurants': serializer.data}, status=status.HTTP_200_OK)
