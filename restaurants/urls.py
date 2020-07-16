@@ -3,7 +3,11 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    # RESTAURANTS
-    path('restaurants', views.RestaurantsView.as_view(), name='list_restaurants'),
-    path('restaurant/<int:pk>/products', views.ProductsViews.as_view(), name='list_products'),
+    # RESTAURANTS endpoints
+    path('restaurants', views.RestaurantsView.as_view({'get': 'get_list'}), name='list_restaurants'),
+
+    # PRODUCTS endpoints
+    path('restaurant/<int:pk>/products', views.ProductsViews.as_view({'get': 'get_list'}), name='list_products'),
+    path('product/<int:pk>', views.ProductsViews.as_view({'get': 'retrieve'}), name='product_detail'),
+
 ]
