@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 import json
 
 from .models import Restaurant
@@ -10,6 +11,6 @@ class RestaurantsTestCase(TestCase):
         restaurant_2 = Restaurant.objects.create(name='Restaurante Italiano')
     
     def test_ListRestaurants(self):
-        response = self.client.get('/restaurants/')
+        response = self.client.get(reverse('list_restaurants'), formal='json')
         self.assertEqual(response.status_code, 200)
 
