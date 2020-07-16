@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 import json
-
+from decimal import Decimal
 from .models import Restaurant, Product
 # Create your tests here.
 
@@ -91,6 +91,16 @@ class ProductDetailTestCase(TestCase):
 
     def test_retrieve_product(self):
         restaurant_test = Restaurant.objects.get(name='Arroz con Habichuela')
+        product_test = Product.objects.filter(restaurant=restaurant_test.id).first()
+
+        # Realiza la peticion enviando el pk del primer producto creado
         response = self.client.get(reverse('product_detail', kwargs={
-                                   'pk': restaurant_test.id}), formal='json')
+                                   'pk': product_test.id}), formal='json')
         self.assertEqual(response.status_code, 200)  # Valida codigo de estado
+
+        response_data = json.loads(response.content)
+        self.assertEqual(product_test.name, response_data['product_detail']['name']) # Valida el nombre del producto retornado
+        self.assertEqual(product_test.id, response_data['product_detail']['id']) # Valida el ID del producto retornado
+        self.assertEqual(str(product_test.price), response_data['product_detail']['price']) # Valida el precio del producto retornado
+
+
