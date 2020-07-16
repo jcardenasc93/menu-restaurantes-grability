@@ -63,7 +63,7 @@ class ProductsTestCase(TestCase):
         # Calcula la sumatoria de los precios de los productos consultados
         total_products_price_data = 0
         for prodcut_data in response_data['products']:
-            total_products_price_data += prodcut_data['price']
+            total_products_price_data += float(prodcut_data['price'])
             
 
         self.assertEqual(response.status_code, 200)  # Valida codigo de estado     

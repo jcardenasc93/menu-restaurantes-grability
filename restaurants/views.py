@@ -29,9 +29,11 @@ class ProductsViews(APIView):
     """
 
     def get(self, request, pk=None):
-        # Cuando se realiza una petición GET el API retorna los objetos Products relacionados con el 
+        # Cuando se realiza una petición GET el API retorna los objetos Products relacionados con el
         # restaurante capturado desde la URL. Si el ID no existe retorna 404
         restaurant = get_object_or_404(Restaurant, id=pk)
         products = Product.objects.filter(restaurant=restaurant.id)
-        serializer = ProductsSerializer(products, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        products_serializer = ProductsSerializer(products, many=True)
+        restaurant_data = {'id': restaurant.id, 'name': restaurant.name}
+        
+        return Response({'restaurant': restaurant_data, 'total': products.count(), 'products': products_serializer.data}, status=status.HTTP_200_OK)
