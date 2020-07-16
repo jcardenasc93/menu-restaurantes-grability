@@ -49,8 +49,24 @@ class ProductsTestCase(TestCase):
 
     def test_list_products(self):
         restaurant_test = Restaurant.objects.get(name='Siempre lleno')
+        products = Product.objects.filter(restaurant=restaurant_test.id)
+
+        # Calcula la sumatoria de los precios de los productos creados 
+        total_products_price = 0
+        for prodcut in products:
+            total_products_price += prodcut.price
+
         response = self.client.get(reverse('list_products', kwargs={
                                    'pk': restaurant_test.id}), formal='json')
         response_data = json.loads(response.content)
-        self.assertEqual(response.status_code, 200)  # Valida codigo de estado        
-        self.assertEqual(len(response_data), 5) # Valida la cantidad de productos
+        
+        # Calcula la sumatoria de los precios de los productos consultados
+        total_products_price_data = 0
+        for prodcut_data in response_data['products']:
+            total_products_price_data += prodcut_data['price']
+            
+
+        self.assertEqual(response.status_code, 200)  # Valida codigo de estado     
+        self.assertEqual(response_data['total'], 5) # Valida la cantidad de productos
+        self.assertEqual(response_data['restaurant']['name'], restaurant_test.name) # Valida la cantidad de productos
+        self.assertEqual(total_products_price, total_products_price_data) # Valida las sumatorias totales
