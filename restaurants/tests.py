@@ -37,7 +37,7 @@ class ProductsTestCase(TestCase):
     def setUp(self):
         # La configuracion inicial crea un objeto Restaurant y agrega 5 productos
         restaurant_test = Restaurant.objects.create(name='Siempre lleno')
-        for i in range(0, 4):
+        for i in range(0, 5):
             Product.objects.create(
                 name='Producto ' + str(i),
                 description='''A continuación se describen las características del producto ofertado.
@@ -49,8 +49,8 @@ class ProductsTestCase(TestCase):
 
     def test_list_products(self):
         restaurant_test = Restaurant.objects.get(name='Siempre lleno')
-        response = self.client.get(reverse('list_products'), formal='json', kwarrgs={
-                                   'pk': restaurant_test.id})
+        response = self.client.get(reverse('list_products', kwargs={
+                                   'pk': restaurant_test.id}), formal='json')
         response_data = json.loads(response.content)
-        self.assertEqual(response.status_code, 200) # Valida codigo de estado
+        self.assertEqual(response.status_code, 200)  # Valida codigo de estado        
         self.assertEqual(len(response_data), 5) # Valida la cantidad de productos
