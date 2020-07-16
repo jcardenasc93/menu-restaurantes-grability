@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 import json
 from rest_framework_api_key.models import APIKey
-
+from decimal import Decimal
 from .models import Restaurant, Product
 
 # Create your tests here.
@@ -80,13 +80,14 @@ class ProductsTestCase(TestCase):
                 description='''A continuación se describen las características del producto ofertado.
                 Se debe describir su sabor, sus ingredientes de forma tal que impacten el paladar del consumidor.
                 ''',
-                price=5000 * 12.0 / (i + 1),
+                price=5000 * 12.00 / (i + 1),
                 restaurant=restaurant_test
             )
 
     def test_list_products(self):
         restaurant_test = Restaurant.objects.get(name='Siempre lleno')
-        products = Product.objects.filter(restaurant=restaurant_test.id)
+        # Busca los primeros 10 productos
+        products = Product.objects.filter(restaurant=restaurant_test.id)[:10]
 
         # Calcula la sumatoria de los precios de los productos creados
         total_products_price = 0
@@ -103,16 +104,15 @@ class ProductsTestCase(TestCase):
 
         # Calcula la sumatoria de los precios de los productos consultados
         total_products_price_data = 0
-        for prodcut_data in response_data['products']:
+        for prodcut_data in response_data['results']:
             total_products_price_data += float(prodcut_data['price'])
 
-        self.assertEqual(response.status_code, 200)  # Valida codigo de estado
-        # Valida la cantidad de productos
-        self.assertEqual(response_data['count'], 50)
-        self.assertEqual(response_data['restaurant']
-                         ['name'], restaurant_test.name)  # Valida la cantidad de productos
-        # Valida las sumatorias totales
-        self.assertEqual(str(total_products_price), str(total_products_price_data))
+        self.assertEqual(response.status_code, 200)  # Valida codigo de estado                
+        self.assertEqual(response_data['count'], 50) # Valida la cantidad de productos
+        self.assertEqual(response_data['results'][0]['restaurant']
+                         ['name'], restaurant_test.name)  # Valida informacion del restaurante al que pertenece el producto
+        
+        self.assertEqual(total_products_price, Decimal(str(total_products_price_data))) # Valida las sumatorias totales
 
     def test_api_key_validation(self):
         # Este test valida el acceso al endpoint 'restaurant/<int:pk>/products' por medio de un API-KEY
