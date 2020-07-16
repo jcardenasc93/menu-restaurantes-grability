@@ -1,10 +1,17 @@
 from django.test import TestCase
 from django.urls import reverse
 import json
-from decimal import Decimal
+from rest_framework_api_key.models import APIKey
+
 from .models import Restaurant, Product
 
 # Create your tests here.
+
+def generateAPIKey():
+    '''Esta funcion genera un API-KEY temporal para ejecutar las pruebas.
+    El método retorna dos variables api_key, key
+    '''
+    return APIKey.objects.create_key(name="my-remote-service")
 
 class RestaurantsTestCase(TestCase):
     # En esta clase serán ejecutadas las pruebas unitarias para endpoint que retorna el listado de restaurantes
@@ -19,8 +26,12 @@ class RestaurantsTestCase(TestCase):
         la cantidad correcta de restaurantes creados. Adicionalmente se valida
         el nombre de un restaurante
         """
+        
+        # Genera API-KEY
+        api_key, key = generateAPIKey()
+        headers = {'HTTP_AUTHORIZATION': 'Api-Key {}'.format(key)}
 
-        response = self.client.get(reverse('list_restaurants'), formal='json')
+        response = self.client.get(reverse('list_restaurants'), formal='json', **headers)
         response_data = json.loads(response.content)
         restaurant_1 = Restaurant.objects.get(name='Coma y vuelva')
         
@@ -64,9 +75,13 @@ class ProductsTestCase(TestCase):
         total_products_price = 0
         for prodcut in products:
             total_products_price += prodcut.price
+        
+        # Genera API-KEY
+        api_key, key = generateAPIKey()
+        headers = {'HTTP_AUTHORIZATION': 'Api-Key {}'.format(key)}
 
         response = self.client.get(reverse('list_products', kwargs={
-                                   'pk': restaurant_test.id}), formal='json')
+                                   'pk': restaurant_test.id}), formal='json', **headers)
         response_data = json.loads(response.content)
 
         # Calcula la sumatoria de los precios de los productos consultados
@@ -113,10 +128,14 @@ class ProductDetailTestCase(TestCase):
         restaurant_test = Restaurant.objects.get(name='Arroz con Habichuela')
         product_test = Product.objects.filter(
             restaurant=restaurant_test.id).first()
+        
+        # Genera API-KEY
+        api_key, key = generateAPIKey()
+        headers = {'HTTP_AUTHORIZATION': 'Api-Key {}'.format(key)}
 
         # Realiza la peticion enviando el pk del primer producto creado
         response = self.client.get(reverse('product_detail', kwargs={
-                                   'pk': product_test.id}), formal='json')
+                                   'pk': product_test.id}), formal='json', **headers)
         self.assertEqual(response.status_code, 200)  # Valida codigo de estado
 
         response_data = json.loads(response.content)
