@@ -6,7 +6,6 @@ from django.shortcuts import get_object_or_404
 
 from .models import Restaurant, Product
 from .serializers import RestaurantSerializer, ProductsSerializer
-from restaurantMenus.permissions import APIKeyAuth
 
 
 # Create your views here.
@@ -43,7 +42,7 @@ class ProductsViews(viewsets.ModelViewSet):
         # Cuando se realiza una petición GET el servidor identifica si el ID capturado en la URL pertenece a un producto
         # de ser asi, el API retorna el detalle del producto
 
-        product = Product.objects.get(id=pk)        
+        product = Product.objects.get(id=pk)
         product_serializer = ProductsSerializer(product)
         restaurant_data = product.restaurant.name
 
