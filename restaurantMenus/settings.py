@@ -135,7 +135,14 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework_api_key.permissions.HasAPIKey',
-    ]
+    ],
+
+    # JWT Authentication
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
 
 API_KEY_CUSTOM_HEADER = "HTTP_GRABILITY_API_KEY"

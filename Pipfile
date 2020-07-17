@@ -10,6 +10,7 @@ django = "*"
 psycopg2-binary = "*"
 djangorestframework-api-key = "*"
 factory-boy = "*"
+djangorestframework-jwt = "*"
 
 [requires]
 python_version = "3.8"
