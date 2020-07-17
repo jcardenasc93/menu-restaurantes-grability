@@ -98,7 +98,7 @@ Adicionalmente el API cuenta con un endpoint por medio del cual se puede consult
 curl -X GET http://your_host_or_ip:8000/api/v1/product/3 -H "GRABILITY-API-KEY: YOUR_API_KEY"
 ```
 
-
+**_NOTA:_** _Las consultas de listas (lista de productos y lista de restaurantes) se encuentran paginadas por un máximo de 10 elementos por página_.
 
 ### Autenticación JWT
 
