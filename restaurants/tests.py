@@ -54,7 +54,7 @@ class RestaurantsTestCase(TestCase):
         response = self.client.get(reverse('list_restaurants'), formal='json')
         response_data = json.loads(response.content)
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
     
     def  test_pagination_restaurants(self):
         # Este test valida la paginación del listado de restaurantes (items_max = 10)
@@ -122,7 +122,7 @@ class ProductsTestCase(TestCase):
                                    'pk': restaurant_test.id}), formal='json')
         response_data = json.loads(response.content)
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
     
     def  test_pagination_products(self):
         # Este test valida la paginación del listado de productos (items_max = 10)
@@ -192,4 +192,4 @@ class ProductDetailTestCase(TestCase):
                                    'pk': product_test.id}), formal='json')
         response_data = json.loads(response.content)
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
