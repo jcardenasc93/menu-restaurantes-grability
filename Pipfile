@@ -12,6 +12,7 @@ djangorestframework-api-key = "*"
 factory-boy = "*"
 djangorestframework-jwt = "*"
 django-cors-headers = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.8"
