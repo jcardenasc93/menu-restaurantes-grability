@@ -137,3 +137,5 @@ REST_FRAMEWORK = {
         'rest_framework_api_key.permissions.HasAPIKey',
     ]
 }
+
+API_KEY_CUSTOM_HEADER = "HTTP_GRABILITY_API_KEY"

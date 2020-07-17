@@ -22,7 +22,7 @@ class Restaurant(models.Model):
         verbose_name_plural = 'Restaurants'
 
     def __str__(self):
-        return self.name
+        return self.name + ' (' + str(self.id) + ')'
 
 
 class Product(models.Model):
@@ -47,4 +47,4 @@ class Product(models.Model):
         verbose_name_plural = 'Products'
 
     def __str__(self):
-        return self.name
+        return self.name + ' (' + str(self.id) + ')'
