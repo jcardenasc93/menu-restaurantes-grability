@@ -33,7 +33,7 @@ class RestaurantsTestCase(TestCase):
         
         # Genera API-KEY
         api_key, key = generateAPIKey()
-        headers = {'HTTP_AUTHORIZATION': 'Api-Key {}'.format(key)}
+        headers = {'HTTP_GRABILITY_API_KEY': '{}'.format(key)}
 
         response = self.client.get(reverse('list_restaurants'), formal='json', **headers)
         response_data = json.loads(response.content)
@@ -61,7 +61,7 @@ class RestaurantsTestCase(TestCase):
 
         # Genera API-KEY
         api_key, key = generateAPIKey()
-        headers = {'HTTP_AUTHORIZATION': 'Api-Key {}'.format(key)}
+        headers = {'HTTP_GRABILITY_API_KEY': '{}'.format(key)}
 
         response = self.client.get(reverse('list_restaurants'), formal='json', **headers)
         response_data = json.loads(response.content)
@@ -96,7 +96,7 @@ class ProductsTestCase(TestCase):
         
         # Genera API-KEY
         api_key, key = generateAPIKey()
-        headers = {'HTTP_AUTHORIZATION': 'Api-Key {}'.format(key)}
+        headers = {'HTTP_GRABILITY_API_KEY': '{}'.format(key)}
 
         response = self.client.get(reverse('list_products', kwargs={
                                    'pk': restaurant_test.id}), formal='json', **headers)
@@ -132,7 +132,7 @@ class ProductsTestCase(TestCase):
 
         # Genera API-KEY
         api_key, key = generateAPIKey()
-        headers = {'HTTP_AUTHORIZATION': 'Api-Key {}'.format(key)}
+        headers = {'HTTP_GRABILITY_API_KEY': '{}'.format(key)}
 
         response = self.client.get(reverse('list_products', kwargs={
                                    'pk': restaurant_test.id}), formal='json', **headers)
@@ -165,7 +165,7 @@ class ProductDetailTestCase(TestCase):
         
         # Genera API-KEY
         api_key, key = generateAPIKey()
-        headers = {'HTTP_AUTHORIZATION': 'Api-Key {}'.format(key)}
+        headers = {'HTTP_GRABILITY_API_KEY': '{}'.format(key)}
 
         # Realiza la peticion enviando el pk del primer producto creado
         response = self.client.get(reverse('product_detail', kwargs={
